@@ -1,0 +1,87 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Hapus Buku - Perpustakaan{% endblock %}
+
+{% block content %}
+<div class="page-title mb-4">
+    <i class="fas fa-exclamation-triangle" style="color: #eb3b5a;"></i>
+    Konfirmasi Penghapusan Buku
+</div>
+
+<div class="alert alert-danger" role="alert">
+    <h5 class="alert-heading">
+        <i class="fas fa-warning me-2"></i>Perhatian!
+    </h5>
+    <p class="mb-0">
+        Apakah Anda yakin ingin menghapus buku ini? Tindakan ini tidak dapat dibatalkan.
+    </p>
+</div>
+
+<div class="card border-danger">
+    <div class="card-header" style="background: linear-gradient(135deg, #eb3b5a, #fa8231);">
+        <i class="fas fa-book me-2"></i>Informasi Buku yang Akan Dihapus
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="fas fa-heading me-2"></i>Judul
+                    </div>
+                    <div class="detail-value">{{ book.title }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="fas fa-user me-2"></i>Pengarang
+                    </div>
+                    <div class="detail-value">{{ book.author }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="fas fa-barcode me-2"></i>ISBN
+                    </div>
+                    <div class="detail-value">{{ book.isbn }}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="fas fa-building me-2"></i>Penerbit
+                    </div>
+                    <div class="detail-value">{{ book.publisher }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="fas fa-boxes me-2"></i>Stok
+                    </div>
+                    <div class="detail-value">
+                        <span class="badge badge-info">{{ book.quantity }} Eksemplar</span>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="fas fa-calendar me-2"></i>Tanggal Publikasi
+                    </div>
+                    <div class="detail-value">{{ book.publication_date|date:"d F Y" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex gap-2 flex-wrap">
+    <form method="post" class="d-inline-flex gap-2">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-lg">
+            <i class="fas fa-check me-2"></i>Ya, Hapus Buku
+        </button>
+    </form>
+    <a href="{% url 'book_detail' book.pk %}" class="btn btn-secondary btn-lg">
+        <i class="fas fa-times me-2"></i>Batal / Jangan Hapus
+    </a>
+</div>
+{% endblock %}

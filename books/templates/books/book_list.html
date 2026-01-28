@@ -1,0 +1,89 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Daftar Buku - Perpustakaan{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <i class="fas fa-book"></i>
+    Daftar Buku Perpustakaan
+</div>
+
+<!-- Search Form -->
+<div class="search-container">
+    <form method="get" class="row g-3">
+        <div class="col-md-9">
+            <div class="input-group">
+                <span class="input-group-text" style="background: none; border: none;">
+                    <i class="fas fa-search" style="color: #667eea;"></i>
+                </span>
+                <input type="text" name="search" class="form-control" placeholder="Cari judul, pengarang, atau ISBN..." value="{{ search_query }}" style="border-left: none;">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-magnifying-glass me-2"></i>Cari
+            </button>
+        </div>
+    </form>
+    {% if search_query %}
+        <div class="search-results">
+            Hasil pencarian untuk: <strong>{{ search_query }}</strong> 
+            <a href="{% url 'book_list' %}" class="ms-2"><i class="fas fa-times"></i> Hapus filter</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Books List -->
+{% if books %}
+    <div class="book-grid">
+        {% for book in books %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-book-bookmark me-2" style="color: #667eea;"></i>{{ book.title }}
+                    </h5>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label"><i class="fas fa-user me-2"></i>Pengarang</div>
+                        <div class="detail-value">{{ book.author }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label"><i class="fas fa-barcode me-2"></i>ISBN</div>
+                        <div class="detail-value">{{ book.isbn }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label"><i class="fas fa-building me-2"></i>Penerbit</div>
+                        <div class="detail-value">{{ book.publisher }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="badge badge-info">
+                            <i class="fas fa-boxes me-2"></i>{{ book.quantity }} Eksemplar
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'book_detail' book.pk %}" class="btn btn-primary btn-sm" title="Lihat detail buku">
+                        <i class="fas fa-eye me-2"></i>Lihat
+                    </a>
+                    <a href="{% url 'book_update' book.pk %}" class="btn btn-warning btn-sm" title="Edit buku">
+                        <i class="fas fa-pen me-2"></i>Edit
+                    </a>
+                    <a href="{% url 'book_delete' book.pk %}" class="btn btn-danger btn-sm" title="Hapus buku">
+                        <i class="fas fa-trash me-2"></i>Hapus
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">
+            <i class="fas fa-info-circle me-2"></i>Belum Ada Data
+        </h4>
+        <p>Tidak ada buku di perpustakaan. <a href="{% url 'book_create' %}" class="alert-link" style="text-decoration: underline;">Tambah buku sekarang</a></p>
+    </div>
+{% endif %}
+{% endblock %}
