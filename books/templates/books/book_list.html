@@ -11,7 +11,7 @@
 <!-- Search Form -->
 <div class="search-container">
     <form method="get" class="row g-3">
-        <div class="col-md-9">
+        <div class="col-md-7">
             <div class="input-group">
                 <span class="input-group-text" style="background: none; border: none;">
                     <i class="fas fa-search" style="color: #667eea;"></i>
@@ -23,6 +23,11 @@
             <button type="submit" class="btn btn-primary w-100">
                 <i class="fas fa-magnifying-glass me-2"></i>Cari
             </button>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'export_csv' %}" class="btn btn-success w-100" title="Unduh data buku dalam format CSV">
+                <i class="fas fa-download me-2"></i>Export CSV
+            </a>
         </div>
     </form>
     {% if search_query %}

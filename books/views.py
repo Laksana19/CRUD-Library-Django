@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.http import HttpResponse
+import csv
 from .models import Book
 from .forms import BookForm
 
@@ -47,3 +49,33 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'books/book_confirm_delete.html', {'book': book})
+
+# Export books to CSV
+def export_books_csv(request):
+    books = Book.objects.all()
+    
+    response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+    response['Content-Disposition'] = 'attachment; filename="books.csv"'
+    # Add BOM untuk UTF-8
+    response.write('\ufeff')
+    
+    writer = csv.writer(response, delimiter=';')
+    # Header
+    writer.writerow(['ID', 'Judul', 'Penulis', 'ISBN', 'Penerbit', 'Tanggal Publikasi', 'Deskripsi', 'Jumlah', 'Dibuat', 'Diupdate'])
+    
+    # Data
+    for book in books:
+        writer.writerow([
+            str(book.id),
+            book.title,
+            book.author,
+            book.isbn,
+            book.publisher,
+            str(book.publication_date),
+            book.description if book.description else '',
+            str(book.quantity),
+            str(book.created_at),
+            str(book.updated_at),
+        ])
+    
+    return response
